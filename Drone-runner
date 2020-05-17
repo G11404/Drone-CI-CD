@@ -1,0 +1,11 @@
+docker run -d \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e DRONE_RPC_PROTO=https \
+  -e DRONE_RPC_HOST=d7d29171.ngrok.io \
+  -e DRONE_RPC_SECRET=123 \
+  -e DRONE_RUNNER_CAPACITY=2 \
+  -e DRONE_RUNNER_NAME=myrunner \
+  -p 3000:80 \
+  --restart always \
+  --name runner \
+  drone/drone-runner-docker:1

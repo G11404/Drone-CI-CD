@@ -1,0 +1,13 @@
+docker pull drone/drone-runner-docker:1
+
+$ docker run -d \
+  -v //./pipe/docker_engine://./pipe/docker_engine \
+  -e DRONE_RPC_PROTO=https \
+  -e DRONE_RPC_HOST=ngrok.io \
+  -e DRONE_RPC_SECRET=123 \
+  -e DRONE_RUNNER_CAPACITY=2 \
+  -e DRONE_RUNNER_NAME=my-runner \
+  -p 3000:80 \
+  --restart always \
+  --name runner \
+  drone/drone-runner-docker:1

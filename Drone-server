@@ -1,0 +1,18 @@
+docker run \
+  --volume=/var/run/docker.sock:/var/run/docker.sock \
+  --volume=/Volumes/MyComputer/projects/htdocs/drone.io/drone:/data \
+  --env=DRONE_GITHUB_SERVER=https://github.com \
+  --env=DRONE_GITHUB_CLIENT_ID=d8969bb3e98ad8c1988e \
+  --env=DRONE_GITHUB_CLIENT_SECRET=fcf79d872042316ac760bcaa7030f3d0fa7c7b12 \
+  --env=DRONE_RPC_SECRET=123 \
+  --env=DRONE_RUNNER_CAPACITY=2 \
+  --env=DRONE_TLS_AUTOCERT=true \
+  --env=DRONE_USER_CREATE=username:autolab,admin:true \
+  --env=DRONE_SERVER_HOST=d7d29171.ngrok.io \
+  --env=DRONE_SERVER_PROTO=https \
+  --publish=8090:80 \
+  --publish=443:443 \
+  --restart=always \
+  --detach=true \
+  --name=drone \
+  drone/drone

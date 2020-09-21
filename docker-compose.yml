@@ -1,0 +1,45 @@
+### 參考文章 ###
+### (https://chunkai.me/2018/06/18/setting-up-drone-for-gitlab-integration/) ###
+version: '2'
+
+services:
+  ### Drone Setting
+  drone-server:
+    image: drone/drone:1
+    container_name: drone-server
+    ports:
+      - 8081:80
+  
+    volumes:
+      - ./:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    environment:
+      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}                       # Drone URL
+      - DRONE_SERVER_PROTO=${DRONE_SERVER_PROTO}                     # http 或者 https 連線設定
+      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
+
+      # GitHub Config
+      - DRONE_GITHUB_SERVER=https://github.com                        # Gitlab Server
+      - DRONE_GITHUB_CLIENT_ID=${DRONE_GITLAB_CLIENT_ID}             # OAuth 的 Application ID
+      - DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITLAB_CLIENT_SECRET}     # OAuth 的 Secret
+
+      - DRONE_LOGS_DEBUG=true                                        # 選擇是否開啟 debug 模式
+      # - DRONE_LOGS_PRETTY=true                                     # Log 是否以json方式呈現
+      - DRONE_LOGS_COLOR=true                                        # Log 啟用顏色辨識
+
+  drone-runner:
+    image: drone/drone-runner-docker:1
+    container_name: drone-runner
+    restart: always
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_RPC_HOST=${DRONE_RPC_HOST}
+      - DRONE_RPC_PROTO=${DRONE_RPC_PROTO}
+      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
+
+      - DRONE_RUNNER_CAPACITY=3
+      - DRONE_LOGS_DEBUG=true
